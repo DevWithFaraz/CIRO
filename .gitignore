@@ -1,0 +1,11 @@
+backend/.env
+backend/firebase_credentials.json
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+node_modules/
+.expo/
+.DS_Store
+Thumbs.db

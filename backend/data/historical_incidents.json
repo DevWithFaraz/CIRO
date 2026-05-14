@@ -1,0 +1,35 @@
+[
+  {
+    "incident_id": "INC_2025_G10_001",
+    "location": "G-10",
+    "crisis_type": "flood",
+    "month": "July",
+    "severity": "HIGH",
+    "main_cause": "drainage overflow after heavy monsoon",
+    "response_effectiveness": 72,
+    "roads_affected": ["G-10 Main Boulevard", "Service Road East"],
+    "lessons_learned": "Early rerouting via G-9 reduced congestion by 40%"
+  },
+  {
+    "incident_id": "INC_2024_F8_001",
+    "location": "F-8",
+    "crisis_type": "road_blockage",
+    "month": "March",
+    "severity": "MEDIUM",
+    "main_cause": "sewage pipe burst",
+    "response_effectiveness": 85,
+    "roads_affected": ["F-8 Markaz Main Road"],
+    "lessons_learned": "Quick dispatch from F-8 station resolved in under 2 hours"
+  },
+  {
+    "incident_id": "INC_2025_G9_001",
+    "location": "G-9",
+    "crisis_type": "flood",
+    "month": "August",
+    "severity": "CRITICAL",
+    "main_cause": "extreme rainfall 95mm/h exceeded drainage capacity",
+    "response_effectiveness": 61,
+    "roads_affected": ["G-9 Markaz", "Khayaban-e-Suharwardy"],
+    "lessons_learned": "Multi-agency coordination required for CRITICAL severity"
+  }
+]
