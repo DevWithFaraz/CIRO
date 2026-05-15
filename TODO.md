@@ -9,82 +9,82 @@
 ## PHASE 0 — Environment & Project Setup
 
 ### 0.1 Folder Structure
-- [ ] Create `CIRO/` root directory
-- [ ] Create empty placeholder files according to new modular structure (e.g. `backend/agents/`, `backend/services/`, etc.)
-- [ ] Create `backend/requirements.txt`
-- [ ] Create `backend/.env.example` and `backend/.env` (never commit)
-- [ ] Create `.gitignore` covering `backend/.env`, `backend/firebase_credentials.json`, `__pycache__/`, `*.pyc`, `*.pyo`, `.venv/`, `node_modules/`, etc.
-- [ ] Create `.agents/` directory with `rules/`, `skills/`, `workflows/` subdirs
-- [ ] Create `mobile/CIROApp/` and `docs/` directories
+- [x] Create `CIRO/` root directory
+- [x] Create empty placeholder files according to new modular structure (e.g. `backend/agents/`, `backend/services/`, etc.)
+- [x] Create `backend/requirements.txt`
+- [x] Create `backend/.env.example` and `backend/.env` (never commit)
+- [x] Create `.gitignore` covering `backend/.env`, `backend/firebase_credentials.json`, `__pycache__/`, `*.pyc`, `*.pyo`, `.venv/`, `node_modules/`, etc.
+- [x] Create `.agents/` directory with `rules/`, `skills/`, `workflows/` subdirs
+- [x] Create `mobile/CIROApp/` and `docs/` directories
 
 ### 0.2 Dependencies
-- [ ] Install: `pip install flask flask-cors python-dotenv google-generativeai firebase-admin requests`
-- [ ] Pin versions in `requirements.txt`
+- [x] Install: `pip install flask flask-cors python-dotenv google-generativeai firebase-admin requests`
+- [x] Pin versions in `requirements.txt`
 
 ### 0.3 API Keys & Credentials
-- [ ] Add `OPENWEATHER_KEY` to `.env`
-- [ ] Add `GEMINI_KEY` to `.env`
-- [ ] Add `GOOGLE_MAPS_KEY` to `.env` (reserved for UI)
-- [ ] Add `FIREBASE_CRED_PATH=./firebase_credentials.json` to `.env`
-- [ ] Add `FLASK_ENV=development` and `FLASK_PORT=5000` to `.env`
-- [ ] Download Firebase service account JSON → save as `firebase_credentials.json` in project root
-- [ ] **Verify OWM key:** `curl "https://api.openweathermap.org/data/2.5/weather?q=Islamabad,PK&appid=YOUR_KEY&units=metric"` — confirm `rain['1h']` field exists
-- [ ] **Verify Gemini:** paste Signal Intelligence prompt into AI Studio, confirm JSON output
-- [ ] **Verify Firebase:** create and read a test document from Python
-- [ ] **List Gemini models** in Python: `[m.name for m in genai.list_models()]` — confirm `gemini-2.0-flash` available
+- [x] Add `OPENWEATHER_KEY` to `.env`
+- [x] Add `GEMINI_KEY` to `.env`
+- [x] Add `GOOGLE_MAPS_KEY` to `.env` (reserved for UI)
+- [x] Add `FIREBASE_CRED_PATH=./firebase_credentials.json` to `.env`
+- [x] Add `FLASK_ENV=development` and `FLASK_PORT=5000` to `.env`
+- [x] Download Firebase service account JSON → save as `firebase_credentials.json` in project root
+- [x] **Verify OWM key:** `curl "https://api.openweathermap.org/data/2.5/weather?q=Islamabad,PK&appid=YOUR_KEY&units=metric"` — confirm `rain['1h']` field exists
+- [x] **Verify Gemini:** paste Signal Intelligence prompt into AI Studio, confirm JSON output
+- [x] **Verify Firebase:** create and read a test document from Python
+- [x] **List Gemini models** in Python: `[m.name for m in genai.list_models()]` — confirm `gemini-2.0-flash` available
 
 ---
 
 ## PHASE 1 — Foundation Modules
 
 ### 1.1 `constants.py`
-- [ ] Define `COLLECTION_SESSIONS = 'crisis_sessions'`
-- [ ] Define `COLLECTION_HISTORICAL = 'historical_incidents'`
-- [ ] Define agent name constants: `AGENT_SIGNAL_INTEL`, `AGENT_CRISIS_ANALYST`, `AGENT_RESPONSE_COMMANDER`, `AGENT_ORCHESTRATOR`
-- [ ] Define `COORDS` dict with all 6 G-10 area coordinates (G-10 Markaz, G-10/1, G-10/2, G-10/3, G-9 Markaz, G-11)
-- [ ] Define `BASELINES` dict: `rainfall_normal_mmh=7`, `wind_normal_kmh=25`, `visibility_normal_km=5`, `congestion_normal_pct=30`, `traffic_speed_normal_kmh=45`
-- [ ] Define `GEMINI_MODEL = 'gemini-2.0-flash'`
+- [x] Define `COLLECTION_SESSIONS = 'crisis_sessions'`
+- [x] Define `COLLECTION_HISTORICAL = 'historical_incidents'`
+- [x] Define agent name constants: `AGENT_SIGNAL_INTEL`, `AGENT_CRISIS_ANALYST`, `AGENT_RESPONSE_COMMANDER`, `AGENT_ORCHESTRATOR`
+- [x] Define `COORDS` dict with all 6 G-10 area coordinates (G-10 Markaz, G-10/1, G-10/2, G-10/3, G-9 Markaz, G-11)
+- [x] Define `BASELINES` dict: `rainfall_normal_mmh=7`, `wind_normal_kmh=25`, `visibility_normal_km=5`, `congestion_normal_pct=30`, `traffic_speed_normal_kmh=45`
+- [x] Define `GEMINI_MODEL = 'gemini-2.0-flash'`
 
 ### 1.2 `backend/services/weather_service.py`
-- [ ] Implement `classify_rain(mm: float) -> str` — returns EXTREME/SEVERE/HEAVY/MODERATE/LIGHT
-- [ ] Implement `fetch_weather(location: str) -> dict`:
-  - [ ] Call OWM endpoint with `q={location},PK`, `units=metric`, `timeout=5`
-  - [ ] Extract `rain['1h']` (NOT `rainfall_mm_last_hour`)
-  - [ ] Extract `wind.speed` → convert m/s to km/h (× 3.6)
-  - [ ] Extract `visibility` → convert m to km (÷ 1000)
-  - [ ] Extract `weather[0].description` and `main.humidity`
-  - [ ] Set `is_fallback: False` on success
-  - [ ] On any exception → return hardcoded fallback: `rainfall_mm_1h=87, alert_level='SEVERE', wind_kmh=45, visibility_km=0.8, humidity_pct=92, is_fallback=True`
+- [x] Implement `classify_rain(mm: float) -> str` — returns EXTREME/SEVERE/HEAVY/MODERATE/LIGHT
+- [x] Implement `fetch_weather(location: str) -> dict`:
+  - [x] Call OWM endpoint with `q={location},PK`, `units=metric`, `timeout=5`
+  - [x] Extract `rain['1h']` (NOT `rainfall_mm_last_hour`)
+  - [x] Extract `wind.speed` → convert m/s to km/h (× 3.6)
+  - [x] Extract `visibility` → convert m to km (÷ 1000)
+  - [x] Extract `weather[0].description` and `main.humidity`
+  - [x] Set `is_fallback: False` on success
+  - [x] On any exception → return hardcoded fallback: `rainfall_mm_1h=87, alert_level='SEVERE', wind_kmh=45, visibility_km=0.8, humidity_pct=92, is_fallback=True`
 
 ### 1.3 `backend/services/traffic_service.py`
-- [ ] Implement `generate_traffic_data(location: str) -> dict`:
-  - [ ] `congestion_pct`: `random.randint(78, 98)`
-  - [ ] `avg_speed_kmh`: `random.randint(2, 8)`
-  - [ ] `normal_speed_kmh`: `45` (fixed)
-  - [ ] `incidents`: `random.randint(2, 5)`
-  - [ ] `data_source`: `"simulated_traffic_feed"`
+- [x] Implement `generate_traffic_data(location: str) -> dict`:
+  - [x] `congestion_pct`: `random.randint(78, 98)`
+  - [x] `avg_speed_kmh`: `random.randint(2, 8)`
+  - [x] `normal_speed_kmh`: `45` (fixed)
+  - [x] `incidents`: `random.randint(2, 5)`
+  - [x] `data_source`: `"simulated_traffic_feed"`
 
 ### 1.4 `utils.py`
-- [ ] Implement `create_session(location: str) -> str` — format: `sess_YYYYMMDD_HHMMSS_ffffff` (include microseconds to avoid collision)
-- [ ] Implement `log_step(session_id, step, message)` — writes to `step_log` array via `ArrayUnion`; never raises (silent catch)
-- [ ] Implement `log_agent_trace(session_id, entry: dict)` — writes to `agent_trace` via `ArrayUnion`
-- [ ] Implement `write_before_state(session_id, state: dict)` — sets `before_state` field
-- [ ] Implement `write_after_state(session_id, state: dict)` — sets `after_state` field
-- [ ] All Firestore writes wrapped in try/except — log error, do NOT propagate exception
+- [x] Implement `create_session(location: str) -> str` — format: `sess_YYYYMMDD_HHMMSS_ffffff` (include microseconds to avoid collision)
+- [x] Implement `log_step(session_id, step, message)` — writes to `step_log` array via `ArrayUnion`; never raises (silent catch)
+- [x] Implement `log_agent_trace(session_id, entry: dict)` — writes to `agent_trace` via `ArrayUnion`
+- [x] Implement `write_before_state(session_id, state: dict)` — sets `before_state` field
+- [x] Implement `write_after_state(session_id, state: dict)` — sets `after_state` field
+- [x] All Firestore writes wrapped in try/except — log error, do NOT propagate exception
 
 ### 1.5 `parse_gemini_json()` (in `backend/services/gemini_service.py`)
-- [ ] Strip leading/trailing whitespace
-- [ ] Strip ` ```json ` and ` ``` ` fences using regex
-- [ ] Call `json.loads()` and return dict
-- [ ] Test against: fenced JSON, unfenced JSON, JSON with leading newline
+- [x] Strip leading/trailing whitespace
+- [x] Strip ` ```json ` and ` ``` ` fences using regex
+- [x] Call `json.loads()` and return dict
+- [x] Test against: fenced JSON, unfenced JSON, JSON with leading newline
 
 ### 1.6 `app.py` — Flask Skeleton
-- [ ] Import and call `load_dotenv()`
-- [ ] Configure Gemini: `genai.configure(api_key=os.getenv('GEMINI_KEY'))`
-- [ ] Initialize Firebase: `credentials.Certificate(os.getenv('FIREBASE_CRED_PATH'))` → `firebase_admin.initialize_app(cred)` → `db = firestore.client()`
-- [ ] Initialize Flask app with CORS: `CORS(app)`
-- [ ] Implement `GET /health` → return `{"status": "ok", "version": "CIRO v1.0", "agents": [...], "subsystems": [...]}`
-- [ ] **Postman Test 1:** GET /health → 200, all 4 agents listed ✓
+- [x] Import and call `load_dotenv()`
+- [x] Configure Gemini: `genai.configure(api_key=os.getenv('GEMINI_KEY'))`
+- [x] Initialize Firebase: `credentials.Certificate(os.getenv('FIREBASE_CRED_PATH'))` → `firebase_admin.initialize_app(cred)` → `db = firestore.client()`
+- [x] Initialize Flask app with CORS: `CORS(app)`
+- [x] Implement `GET /health` → return `{"status": "ok", "version": "CIRO v1.0", "agents": [...], "subsystems": [...]}`
+- [x] **Postman Test 1:** GET /health → 200, all 4 agents listed ✓
 
 ---
 
@@ -217,19 +217,19 @@
 - [ ] **Integration:** Called by Orchestrator after Agent 3; result stored in Firestore as `city_state`; included in `/analyse` response
 
 ### 3.3 `backend/services/firebase_service.py` (Memory Layer)
-- [ ] Implement `find_historical_match(location: str, crisis_type: str = None) -> dict | None`:
-  - [ ] Query `historical_incidents` Firestore collection
-  - [ ] Match on `location` (case-insensitive `in` check)
-  - [ ] Optional filter on `crisis_type`
-  - [ ] Return first match or `None`
-  - [ ] Wrap in try/except → return `None` on any error
-- [ ] Implement `build_historical_context_string(match: dict | None) -> str`:
-  - [ ] If `None` → return `"No historical incidents found for this location."`
-  - [ ] Else → format: `"Current pattern matches the {month} {crisis_type} at {location} (severity: {severity}, cause: {main_cause}, prior response effectiveness: {response_effectiveness}%). Roads previously affected: {roads_affected}."`
-- [ ] Implement `seed_historical_incidents() -> int`:
-  - [ ] Insert 3 incidents: `INC_2025_G10_001` (G-10 flood, HIGH, July), `INC_2025_I8_001` (I-8 road_blockage, MEDIUM, March), `INC_2024_F6_001` (F-6 heatwave, HIGH, June)
-  - [ ] Each with all required fields including `created_at`
-  - [ ] Return count of incidents inserted
+- [x] Implement `find_historical_match(location: str, crisis_type: str = None) -> dict | None`:
+  - [x] Query `historical_incidents` Firestore collection
+  - [x] Match on `location` (case-insensitive `in` check)
+  - [x] Optional filter on `crisis_type`
+  - [x] Return first match or `None`
+  - [x] Wrap in try/except → return `None` on any error
+- [x] Implement `build_historical_context_string(match: dict | None) -> str`:
+  - [x] If `None` → return `"No historical incidents found for this location."`
+  - [x] Else → format: `"Current pattern matches the {month} {crisis_type} at {location} (severity: {severity}, cause: {main_cause}, prior response effectiveness: {response_effectiveness}%). Roads previously affected: {roads_affected}."`
+- [x] Implement `seed_historical_incidents() -> int`:
+  - [x] Insert 3 incidents: `INC_2025_G10_001` (G-10 flood, HIGH, July), `INC_2025_I8_001` (I-8 road_blockage, MEDIUM, March), `INC_2024_F6_001` (F-6 heatwave, HIGH, June)
+  - [x] Each with all required fields including `created_at`
+  - [x] Return count of incidents inserted
 
 ---
 
