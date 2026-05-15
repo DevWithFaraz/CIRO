@@ -1,13 +1,21 @@
 import datetime
+from firebase_admin import firestore
 
-def find_historical_match(db, location: str, crisis_type: str = None) -> dict | None:
+_db = None
+
+def get_db():
+    global _db
+    if _db is None:
+        _db = firestore.client()
+    return _db
+
+def find_historical_match(location: str, crisis_type: str = None) -> dict | None:
     try:
+        db = get_db()
         docs = db.collection('historical_incidents').stream()
         for doc in docs:
             data = doc.to_dict()
             db_location = data.get('location', '').lower()
-            
-            # Check if location matches
             if location.lower() in db_location or db_location in location.lower():
                 if crisis_type:
                     if data.get('crisis_type', '').lower() == crisis_type.lower():
@@ -21,10 +29,8 @@ def find_historical_match(db, location: str, crisis_type: str = None) -> dict | 
 def build_historical_context_string(match: dict | None) -> str:
     if match is None:
         return "No historical incidents found for this location."
-    
     roads = match.get('roads_affected', [])
     roads_str = ", ".join(roads) if roads else "None"
-    
     return (
         f"Current pattern matches the {match.get('month')} {match.get('crisis_type')} "
         f"at {match.get('location')} (severity: {match.get('severity')}, "
@@ -32,7 +38,7 @@ def build_historical_context_string(match: dict | None) -> str:
         f"{match.get('response_effectiveness')}%). Roads previously affected: {roads_str}."
     )
 
-def seed_historical_incidents(db) -> int:
+def seed_historical_incidents() -> int:
     incidents = [
         {
             "incident_id": "INC_2025_G10_001",
@@ -65,11 +71,10 @@ def seed_historical_incidents(db) -> int:
             "roads_affected": []
         }
     ]
-    
+    db = get_db()
     count = 0
     for incident in incidents:
         incident['created_at'] = datetime.datetime.utcnow().isoformat()
         db.collection('historical_incidents').document(incident['incident_id']).set(incident)
         count += 1
-        
     return count
