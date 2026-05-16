@@ -1,7 +1,9 @@
 import datetime
+from firebase_admin import firestore
 
-def find_historical_match(db, location: str, crisis_type: str = None) -> dict | None:
+def find_historical_match(location: str, crisis_type: str = None) -> dict | None:
     try:
+        db = firestore.client()
         docs = db.collection('historical_incidents').stream()
         for doc in docs:
             data = doc.to_dict()
@@ -32,7 +34,8 @@ def build_historical_context_string(match: dict | None) -> str:
         f"{match.get('response_effectiveness')}%). Roads previously affected: {roads_str}."
     )
 
-def seed_historical_incidents(db) -> int:
+def seed_historical_incidents() -> int:
+    db = firestore.client()
     incidents = [
         {
             "incident_id": "INC_2025_G10_001",

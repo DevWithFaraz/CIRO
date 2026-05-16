@@ -2,12 +2,10 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, jsonify
 from flask_cors import CORS
-import google.generativeai as genai
 import firebase_admin
 from firebase_admin import credentials, firestore
 
 load_dotenv()
-genai.configure(api_key=os.getenv('GEMINI_KEY'))
 
 if not firebase_admin._apps:
     cred = credentials.Certificate(os.getenv('FIREBASE_CRED_PATH'))

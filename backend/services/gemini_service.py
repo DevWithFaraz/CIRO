@@ -1,5 +1,10 @@
+import os
 import re
 import json
+from google import genai
+
+# Initialize client once — agents import this
+client = genai.Client(api_key=os.getenv('GEMINI_KEY'))
 
 def parse_gemini_json(text: str) -> dict:
     text = text.strip()

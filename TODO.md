@@ -91,44 +91,44 @@
 ## PHASE 2 — Core Agents
 
 ### 2.1 Agent 1 — Signal Intelligence (`backend/agents/signal_intelligence.py`)
-- [ ] Define function signature: `agent_signal_intelligence(social_reports, location, session_id, reprocessing_note=None)`
-- [ ] Step 1: Call `fetch_weather(location)` → `weather`
-- [ ] Step 2: Call `generate_traffic_data(location)` → `traffic`
-- [ ] Step 3: Generate `gov_reports` — 2 hardcoded realistic NDMA/news mocks with `source`, `text`, `severity`
-- [ ] Step 4: Query historical incidents (call `find_historical_match` from memory.py)
-- [ ] Step 5: Build Gemini prompt with all variables: `social_reports_text`, `weather_json`, `traffic_json`, `gov_reports_text`, anomaly baselines, optional `reprocessing_note`
-- [ ] Set system instruction: `"You are the Signal Intelligence Agent in CIRO. Return ONLY valid JSON. No markdown. No backticks."`
-- [ ] Step 6: Call `gemini-2.0-flash` → parse with `parse_gemini_json()`
-- [ ] Step 7: Build and return `signal_bundle` with all required fields:
-  - [ ] `processed_reports[]` — each with: `original_text`, `language`, `location_mentioned`, `crisis_indicators`, `urgency`, `entities`, `timestamp_indicator`
-  - [ ] `cluster_analysis` — `primary_location`, `location_matches`, `temporal_cluster`, `cluster_score`, `cluster_reasoning`
-  - [ ] `anomalies_detected[]` — quantified strings (e.g. "Rainfall 87mm is 12.4x above baseline of 7mm")
-  - [ ] `signal_quality` — HIGH/MEDIUM/LOW
-  - [ ] `quality_reasoning`
-- [ ] Implement fallback on Gemini error: `signal_quality='LOW'`, empty `processed_reports`, fallback `cluster_score` from keyword matching
-- [ ] Log `step_log` entry 1 (start) and entry 2 (complete with cluster + anomalies count)
-- [ ] Log `agent_trace` entry with `agent_name`, `timestamp`, `input_summary`, `output_summary`, `gemini_prompt` (truncated 500 chars), `gemini_response` (truncated 500 chars), `decision`, `status`
+- [x] Define function signature: `agent_signal_intelligence(social_reports, location, session_id, reprocessing_note=None)`
+- [x] Step 1: Call `fetch_weather(location)` → `weather`
+- [x] Step 2: Call `generate_traffic_data(location)` → `traffic`
+- [x] Step 3: Generate `gov_reports` — 2 hardcoded realistic NDMA/news mocks with `source`, `text`, `severity`
+- [x] Step 4: Query historical incidents (call `find_historical_match` from memory.py)
+- [x] Step 5: Build Gemini prompt with all variables: `social_reports_text`, `weather_json`, `traffic_json`, `gov_reports_text`, anomaly baselines, optional `reprocessing_note`
+- [x] Set system instruction: `"You are the Signal Intelligence Agent in CIRO. Return ONLY valid JSON. No markdown. No backticks."`
+- [x] Step 6: Call `gemini-2.0-flash` → parse with `parse_gemini_json()`
+- [x] Step 7: Build and return `signal_bundle` with all required fields:
+  - [x] `processed_reports[]` — each with: `original_text`, `language`, `location_mentioned`, `crisis_indicators`, `urgency`, `entities`, `timestamp_indicator`
+  - [x] `cluster_analysis` — `primary_location`, `location_matches`, `temporal_cluster`, `cluster_score`, `cluster_reasoning`
+  - [x] `anomalies_detected[]` — quantified strings (e.g. "Rainfall 87mm is 12.4x above baseline of 7mm")
+  - [x] `signal_quality` — HIGH/MEDIUM/LOW
+  - [x] `quality_reasoning`
+- [x] Implement fallback on Gemini error: `signal_quality='LOW'`, empty `processed_reports`, fallback `cluster_score` from keyword matching
+- [x] Log `step_log` entry 1 (start) and entry 2 (complete with cluster + anomalies count)
+- [x] Log `agent_trace` entry with `agent_name`, `timestamp`, `input_summary`, `output_summary`, `gemini_prompt` (truncated 500 chars), `gemini_response` (truncated 500 chars), `decision`, `status`
 
 ### 2.2 Agent 2 — Crisis Analyst (`backend/agents/crisis_analyst.py`)
-- [ ] Define function signature: `agent_crisis_analyst(signal_bundle, session_id, reanalysis_note=None)`
-- [ ] Extract: `processed_reports`, `weather`, `traffic` from `signal_bundle`
-- [ ] Query historical incidents → build `historical_context` string
-- [ ] Append `reanalysis_note` to prompt if provided
-- [ ] Set system instruction: `"You are the Crisis Analysis Agent in CIRO. You MUST connect ALL signal sources. Return ONLY valid JSON."`
-- [ ] Call Gemini, parse JSON
-- [ ] Required output fields in `situation_report`:
-  - [ ] `crisis_type` — one of: flood/heatwave/accident/road_blockage/infrastructure_failure/unknown
-  - [ ] `location`
-  - [ ] `confidence_level` (HIGH/MEDIUM/LOW), `confidence_score` (0–100)
-  - [ ] `reasoning` — must reference ALL 4 signal sources (social + weather + traffic + gov)
-  - [ ] `severity` — `{people_affected: int, km_affected: float}`
-  - [ ] `impact[]`
-  - [ ] `cluster_evidence`
-  - [ ] `anomalies_found[]`
-  - [ ] `historical_context` — string or null
-- [ ] Fallback: `{crisis_type: "unknown", confidence_level: "LOW", confidence_score: 0, reasoning: f"Analysis error: {str(e)}"}`
-- [ ] Log step_log entries 3 (start) and 4 (complete with crisis_type + confidence)
-- [ ] Log agent_trace entry
+- [x] Define function signature: `agent_crisis_analyst(signal_bundle, session_id, reanalysis_note=None)`
+- [x] Extract: `processed_reports`, `weather`, `traffic` from `signal_bundle`
+- [x] Query historical incidents → build `historical_context` string
+- [x] Append `reanalysis_note` to prompt if provided
+- [x] Set system instruction: `"You are the Crisis Analysis Agent in CIRO. You MUST connect ALL signal sources. Return ONLY valid JSON."`
+- [x] Call Gemini, parse JSON
+- [x] Required output fields in `situation_report`:
+  - [x] `crisis_type` — one of: flood/heatwave/accident/road_blockage/infrastructure_failure/unknown
+  - [x] `location`
+  - [x] `confidence_level` (HIGH/MEDIUM/LOW), `confidence_score` (0–100)
+  - [x] `reasoning` — must reference ALL 4 signal sources (social + weather + traffic + gov)
+  - [x] `severity` — `{people_affected: int, km_affected: float}`
+  - [x] `impact[]`
+  - [x] `cluster_evidence`
+  - [x] `anomalies_found[]`
+  - [x] `historical_context` — string or null
+- [x] Fallback: `{crisis_type: "unknown", confidence_level: "LOW", confidence_score: 0, reasoning: f"Analysis error: {str(e)}"}`
+- [x] Log step_log entries 3 (start) and 4 (complete with crisis_type + confidence)
+- [x] Log agent_trace entry
 
 ### 2.3 Agent 3 — Response Commander (`backend/agents/response_commander.py`)
 - [ ] Define function signature: `agent_response_commander(situation_report, session_id)`
@@ -174,28 +174,28 @@
 ## PHASE 3 — New Subsystems
 
 ### 3.1 `backend/agents/signal_intelligence.py` (GeoTemporal Logic)
-- [ ] Implement `count_location_matches(reports: list, location: str) -> int`:
-  - [ ] Normalize to lowercase
-  - [ ] Check variants: `loc`, `loc.replace('-',' ')`, `loc.replace(' ','-')`
-  - [ ] Count reports containing any variant
-- [ ] Implement `run_geo_temporal_correlation(social_reports, location, weather, traffic, gov_alert_exists=True) -> dict`:
-  - [ ] Compute `nearby_reports` via `count_location_matches`
-  - [ ] Compute `rainfall_mm` from `weather.get('rainfall_mm_1h', 0)`
-  - [ ] Compute `congestion_pct` from `traffic.get('congestion_pct', 0)`
-  - [ ] Compute `traffic_speed_drop` percentage
-  - [ ] Apply confidence boost rules:
-    - [ ] `nearby_reports >= 3` → +10
-    - [ ] `rainfall_mm > 50` → +10
-    - [ ] `congestion_pct > 80` → +5
-    - [ ] `traffic_speed_drop > 70` → +5
-    - [ ] `gov_alert_exists` → +10
-  - [ ] Apply severity escalation table (7 rows from PRD Section 9)
-  - [ ] Cap `confidence_boost` at 40
-  - [ ] Return: `{report_cluster_count, time_window_minutes: 15, confidence_boost, escalated_severity, correlation_factors[]}`
-- [ ] **Integration points:**
-  - [ ] Call from Orchestrator BEFORE Agent 1, pass result into `signal_bundle.geo_correlation`
-  - [ ] Pass GeoTemporal result as context in Agent 1 Gemini prompt
-  - [ ] In Agent 2 / Checkpoint 2: if `confidence_score < geo_correlation.confidence_boost * 2` → flag for re-analysis
+- [x] Implement `count_location_matches(reports: list, location: str) -> int`:
+  - [x] Normalize to lowercase
+  - [x] Check variants: `loc`, `loc.replace('-',' ')`, `loc.replace(' ','-')`
+  - [x] Count reports containing any variant
+- [x] Implement `run_geo_temporal_correlation(social_reports, location, weather, traffic, gov_alert_exists=True) -> dict`:
+  - [x] Compute `nearby_reports` via `count_location_matches`
+  - [x] Compute `rainfall_mm` from `weather.get('rainfall_mm_1h', 0)`
+  - [x] Compute `congestion_pct` from `traffic.get('congestion_pct', 0)`
+  - [x] Compute `traffic_speed_drop` percentage
+  - [x] Apply confidence boost rules:
+    - [x] `nearby_reports >= 3` → +10
+    - [x] `rainfall_mm > 50` → +10
+    - [x] `congestion_pct > 80` → +5
+    - [x] `traffic_speed_drop > 70` → +5
+    - [x] `gov_alert_exists` → +10
+  - [x] Apply severity escalation table (7 rows from PRD Section 9)
+  - [x] Cap `confidence_boost` at 40
+  - [x] Return: `{report_cluster_count, time_window_minutes: 15, confidence_boost, escalated_severity, correlation_factors[]}`
+- [x] **Integration points:**
+  - [x] Call from Orchestrator BEFORE Agent 1, pass result into `signal_bundle.geo_correlation`
+  - [x] Pass GeoTemporal result as context in Agent 1 Gemini prompt
+  - [x] In Agent 2 / Checkpoint 2: if `confidence_score < geo_correlation.confidence_boost * 2` → flag for re-analysis
 
 ### 3.2 `backend/simulation/city_state_simulator.py` — City-State Simulation Engine
 - [ ] Implement `build_before_state(traffic: dict, situation_report: dict) -> dict`:
@@ -267,29 +267,29 @@
 
 ## PHASE 5 — Firebase Schema Compliance
 
-- [ ] Confirm all `AgentTraceEntry` fields written: `agent_name`, `timestamp`, `input_summary`, `output_summary`, `gemini_prompt` (≤500 chars), `gemini_response` (≤500 chars), `decision`, `status`
-- [ ] Confirm all `StepLogEntry` fields written: `step` (float), `message`, `timestamp`
-- [ ] Confirm `signal_bundle` includes: `location`, `social_reports`, `weather`, `traffic`, `gov_reports`, `processed_signals`, `cluster_score`, `anomalies`, `geo_correlation`, `historical_match`
-- [ ] Confirm `situation_report` includes `historical_context` field (string or null)
+- [x] Confirm all `AgentTraceEntry` fields written: `agent_name`, `timestamp`, `input_summary`, `output_summary`, `gemini_prompt` (≤500 chars), `gemini_response` (≤500 chars), `decision`, `status`
+- [x] Confirm all `StepLogEntry` fields written: `step` (float), `message`, `timestamp`
+- [x] Confirm `signal_bundle` includes: `location`, `social_reports`, `weather`, `traffic`, `gov_reports`, `processed_signals`, `cluster_score`, `anomalies`, `geo_correlation`, `historical_match`
+- [x] Confirm `situation_report` includes `historical_context` field (string or null)
 - [ ] Confirm `action_plan.rerouting.route_coords` has `closed[]` and `alternate[]` with `{lat, lng}` objects
 - [ ] Confirm `city_state` written to Firestore with `before` and `after` nested objects
 - [ ] Confirm `before_state` and `after_state` (legacy `SimState` fields) still written for compatibility
-- [ ] Confirm `WeatherData.is_fallback` bool is always present
-- [ ] Confirm `TrafficData.data_source = "simulated_traffic_feed"`
+- [x] Confirm `WeatherData.is_fallback` bool is always present
+- [x] Confirm `TrafficData.data_source = "simulated_traffic_feed"`
 
 ---
 
 ## PHASE 6 — Error Handling & Fallbacks
 
-- [ ] OWM timeout/error → hardcoded fallback weather (87mm, SEVERE, is_fallback: true)
-- [ ] Agent 1 Gemini parse error → fallback bundle with LOW quality, keyword-based cluster score
+- [x] OWM timeout/error → hardcoded fallback weather (87mm, SEVERE, is_fallback: true)
+- [x] Agent 1 Gemini parse error → fallback bundle with LOW quality, keyword-based cluster score
 - [ ] Checkpoint 1 parse error → default `{decision: "proceed"}`
-- [ ] Agent 2 Gemini parse error → `{crisis_type: "unknown", confidence_score: 0}`
+- [x] Agent 2 Gemini parse error → `{crisis_type: "unknown", confidence_score: 0}`
 - [ ] Checkpoint 2 parse error → `proceed` if confidence >= 40, else `re-analyse`
 - [ ] Agent 3 Gemini parse error → hardcoded G-10 action plan, random EMR-XXXX ticket
 - [ ] City Simulator error → return before_state and minimally modified after_state
-- [ ] Firestore write timeout → log error, continue pipeline (don't abort)
-- [ ] Historical query error → return None (no historical context)
+- [x] Firestore write timeout → log error, continue pipeline (don't abort)
+- [x] Historical query error → return None (no historical context)
 - [ ] Every agent wrapped in try/except — no uncaught exceptions anywhere
 
 ---
@@ -328,9 +328,9 @@ Run all 10 tests in sequence. All must pass before UI phase.
 
 ## PHASE 9 — `.agents/` Antigravity Artifacts
 
-- [ ] Write `AGENTS.md` — coding standards for Antigravity build agents (model, style, error handling patterns)
-- [ ] Write `skills/gemini-prompting.md` — prompt templates for all 4 agents, JSON schema expectations
-- [ ] Write `skills/crisis-detection.md` — anomaly baselines, cluster logic, escalation table
+- [x] Write `AGENTS.md` — coding standards for Antigravity build agents (model, style, error handling patterns)
+- [x] Write `skills/gemini-prompting.md` — prompt templates for all 4 agents, JSON schema expectations
+- [x] Write `skills/crisis-detection.md` — anomaly baselines, cluster logic, escalation table
 - [ ] Write `workflows/test-pipeline.md` — step-by-step Postman test instructions
 - [ ] Write `workflows/demo-run.md` — demo flow for judges with expected outputs
 
