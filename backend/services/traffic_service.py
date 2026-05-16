@@ -2,7 +2,7 @@ import os
 import random
 import requests
 
-def get_traffic_data(location: str) -> dict:
+def generate_traffic_data(location: str) -> dict:
     """
     Fetches traffic data using TomTom as primary, Google Maps as secondary,
     and a simulated fallback.

@@ -43,16 +43,15 @@ def agent_orchestrator(social_reports: list, location: str, session_id: str) -> 
         eval1_template = content[eval1_start:eval1_end].strip()
 
         processed = signal_bundle.get('processed_signals', {})
-        eval1_prompt = eval1_template.format(
-            cluster_score=signal_bundle.get('cluster_score', 'LOW'),
-            cluster_reasoning=processed.get('cluster_analysis', {}).get('cluster_reasoning', 'N/A'),
-            signal_quality=processed.get('signal_quality', 'N/A'),
-            quality_reasoning=processed.get('quality_reasoning', 'N/A'),
-            num_processed=len(processed.get('processed_reports', [])),
-            num_raw_reports=len(social_reports),
-            num_anomalies=len(signal_bundle.get('anomalies', [])),
-            weather_alert=signal_bundle.get('weather', {}).get('alert_level', 'None')
-        )
+        eval1_prompt = eval1_template
+        eval1_prompt = eval1_prompt.replace('{cluster_score}', str(signal_bundle.get('cluster_score', 'LOW')))
+        eval1_prompt = eval1_prompt.replace('{cluster_reasoning}', str(processed.get('cluster_analysis', {}).get('cluster_reasoning', 'N/A')))
+        eval1_prompt = eval1_prompt.replace('{signal_quality}', str(processed.get('signal_quality', 'N/A')))
+        eval1_prompt = eval1_prompt.replace('{quality_reasoning}', str(processed.get('quality_reasoning', 'N/A')))
+        eval1_prompt = eval1_prompt.replace('{num_processed}', str(len(processed.get('processed_reports', []))))
+        eval1_prompt = eval1_prompt.replace('{num_raw_reports}', str(len(social_reports)))
+        eval1_prompt = eval1_prompt.replace('{num_anomalies}', str(len(signal_bundle.get('anomalies', []))))
+        eval1_prompt = eval1_prompt.replace('{weather_alert}', str(signal_bundle.get('weather', {}).get('alert_level', 'None')))
 
         eval1_response = generate_content(eval1_prompt) or ''
         try:
@@ -92,17 +91,16 @@ def agent_orchestrator(social_reports: list, location: str, session_id: str) -> 
         eval2_end = content.find('---ANALYSIS_EVAL_END---')
         eval2_template = content[eval2_start:eval2_end].strip()
 
-        eval2_prompt = eval2_template.format(
-            crisis_type=situation_report.get('crisis_type', '?'),
-            confidence_level=situation_report.get('confidence_level', '?'),
-            confidence_score=situation_report.get('confidence_score', 0),
-            reasoning=situation_report.get('reasoning', ''),
-            anomalies_found=situation_report.get('anomalies_found', []),
-            cluster_evidence=situation_report.get('cluster_evidence', ''),
-            cluster_score=signal_bundle.get('cluster_score', 'LOW'),
-            num_reports=len(social_reports),
-            weather_alert=signal_bundle.get('weather', {}).get('alert_level', 'None')
-        )
+        eval2_prompt = eval2_template
+        eval2_prompt = eval2_prompt.replace('{crisis_type}', str(situation_report.get('crisis_type', '?')))
+        eval2_prompt = eval2_prompt.replace('{confidence_level}', str(situation_report.get('confidence_level', '?')))
+        eval2_prompt = eval2_prompt.replace('{confidence_score}', str(situation_report.get('confidence_score', 0)))
+        eval2_prompt = eval2_prompt.replace('{reasoning}', str(situation_report.get('reasoning', '')))
+        eval2_prompt = eval2_prompt.replace('{anomalies_found}', str(situation_report.get('anomalies_found', [])))
+        eval2_prompt = eval2_prompt.replace('{cluster_evidence}', str(situation_report.get('cluster_evidence', '')))
+        eval2_prompt = eval2_prompt.replace('{cluster_score}', str(signal_bundle.get('cluster_score', 'LOW')))
+        eval2_prompt = eval2_prompt.replace('{num_reports}', str(len(social_reports)))
+        eval2_prompt = eval2_prompt.replace('{weather_alert}', str(signal_bundle.get('weather', {}).get('alert_level', 'None')))
 
         eval2_response = generate_content(eval2_prompt) or ''
         try:

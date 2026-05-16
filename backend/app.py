@@ -1,4 +1,5 @@
 import os
+import traceback
 from datetime import datetime
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
@@ -76,6 +77,7 @@ def analyse():
         db.collection(COLLECTION_SESSIONS).document(session_id).update({'status': 'complete'})
         return jsonify(result), 200
     except Exception as e:
+        traceback.print_exc()
         db.collection(COLLECTION_SESSIONS).document(session_id).update({'status': 'error'})
         return jsonify({
             'session_id': session_id,
