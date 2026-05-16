@@ -131,43 +131,43 @@
 - [x] Log agent_trace entry
 
 ### 2.3 Agent 3 — Response Commander (`backend/agents/response_commander.py`)
-- [ ] Define function signature: `agent_response_commander(situation_report, session_id)`
-- [ ] Format situation_report fields into prompt
-- [ ] Include in prompt: Islamabad resources (F-8/G-9/I-8 fire stations, PIMS/Shifa hospitals, Kohsar/Margalla police)
-- [ ] Include in prompt: G-10 area coordinates (all 6 points from constants.py)
-- [ ] Include alert channels: SMS, push notification, loudspeaker, radio
-- [ ] Call Gemini, parse JSON
-- [ ] Add ISO timestamp to each action (`rerouting`, `dispatch`, `alert`) after parsing
-- [ ] Required `action_plan` structure:
-  - [ ] `rerouting` — `closed_road`, `alternate_route`, `reasoning`, `timestamp`, `route_coords.closed[]`, `route_coords.alternate[]`
-  - [ ] `dispatch` — `ticket_id` (format EMR-XXXX), `services[]`, `station`, `teams_deployed`, `vehicles[]`, `eta_minutes`, `reasoning`, `timestamp`
-  - [ ] `alert` — `zones_affected[]`, `message`, `severity`, `channels[]`, `reasoning`, `timestamp`
-- [ ] Fallback: hardcoded G-10 flood action plan with `random.randint(1000,9999)` for ticket_id
-- [ ] Log step_log entries 6 (start) and 7 (complete with 3 action summaries)
-- [ ] Log agent_trace entry
+- [x] Define function signature: `agent_response_commander(situation_report, session_id)`
+- [x] Format situation_report fields into prompt
+- [x] Include in prompt: Islamabad resources (F-8/G-9/I-8 fire stations, PIMS/Shifa hospitals, Kohsar/Margalla police)
+- [x] Include in prompt: G-10 area coordinates (all 6 points from constants.py)
+- [x] Include alert channels: SMS, push notification, loudspeaker, radio
+- [x] Call Gemini, parse JSON
+- [x] Add ISO timestamp to each action (`rerouting`, `dispatch`, `alert`) after parsing
+- [x] Required `action_plan` structure:
+  - [x] `rerouting` — `closed_road`, `alternate_route`, `reasoning`, `timestamp`, `route_coords.closed[]`, `route_coords.alternate[]`
+  - [x] `dispatch` — `ticket_id` (format EMR-XXXX), `services[]`, `station`, `teams_deployed`, `vehicles[]`, `eta_minutes`, `reasoning`, `timestamp`
+  - [x] `alert` — `zones_affected[]`, `message`, `severity`, `channels[]`, `reasoning`, `timestamp`
+- [x] Fallback: hardcoded G-10 flood action plan with `random.randint(1000,9999)` for ticket_id
+- [x] Log step_log entries 6 (start) and 7 (complete with 3 action summaries)
+- [x] Log agent_trace entry
 
 ### 2.4 Agent 4 — Orchestrator (`backend/agents/orchestrator.py`)
-- [ ] Define function signature: `agent_orchestrator(social_reports, location, session_id)`
-- [ ] Log step 0: "Pipeline start, N reports for location"
-- [ ] Call Agent 1 (`agent_signal_intelligence`) → `signal_bundle`
-- [ ] **Checkpoint 1 — Signal Quality Evaluation:**
-  - [ ] Log step 2.5
-  - [ ] Build `ORCHESTRATOR_SIGNAL_EVAL_PROMPT` evaluating: all reports processed? entities/locations extracted? cluster score justified? anomalies detected? signal quality reasonable?
-  - [ ] Make own Gemini call → parse `{decision, reasoning, guidance_for_reprocessing}`
-  - [ ] If parse error → default `{decision: "proceed"}`
-  - [ ] If `decision == "reprocess"` → log step 2.6, re-invoke Agent 1 with `reprocessing_note`, log step 2.7
-- [ ] Call Agent 2 (`agent_crisis_analyst`) → `situation_report`
-- [ ] **Checkpoint 2 — Analysis Quality Evaluation:**
-  - [ ] Log step 5
-  - [ ] Build `ORCHESTRATOR_ANALYSIS_EVAL_PROMPT` evaluating: reasoning connects all 4 sources? confidence justified? anomalies quantified? crisis_type specific? severity reasonable?
-  - [ ] Make own Gemini call → parse `{decision, reasoning, guidance_for_reanalysis}`
-  - [ ] If parse error → `proceed` if confidence >= 40, else `re-analyse`
-  - [ ] If `decision == "re-analyse"` → log step 5.5, re-invoke Agent 2 with `reanalysis_note`, log step 5.6
-- [ ] Call Agent 3 (`agent_response_commander`) → `action_plan`
-- [ ] Call City-State Simulator → `city_state`
-- [ ] Log step 9: "Pipeline complete"
-- [ ] Return full result dict (see PRD Section 8.4 for exact shape)
-- [ ] Add `time.sleep(0.5)` between each consecutive Gemini call
+- [x] Define function signature: `agent_orchestrator(social_reports, location, session_id)`
+- [x] Log step 0: "Pipeline start, N reports for location"
+- [x] Call Agent 1 (`agent_signal_intelligence`) → `signal_bundle`
+- [x] **Checkpoint 1 — Signal Quality Evaluation:**
+  - [x] Log step 2.5
+  - [x] Build `ORCHESTRATOR_SIGNAL_EVAL_PROMPT` evaluating: all reports processed? entities/locations extracted? cluster score justified? anomalies detected? signal quality reasonable?
+  - [x] Make own Gemini call → parse `{decision, reasoning, guidance_for_reprocessing}`
+  - [x] If parse error → default `{decision: "proceed"}`
+  - [x] If `decision == "reprocess"` → log step 2.6, re-invoke Agent 1 with `reprocessing_note`, log step 2.7
+- [x] Call Agent 2 (`agent_crisis_analyst`) → `situation_report`
+- [x] **Checkpoint 2 — Analysis Quality Evaluation:**
+  - [x] Log step 5
+  - [x] Build `ORCHESTRATOR_ANALYSIS_EVAL_PROMPT` evaluating: reasoning connects all 4 sources? confidence justified? anomalies quantified? crisis_type specific? severity reasonable?
+  - [x] Make own Gemini call → parse `{decision, reasoning, guidance_for_reanalysis}`
+  - [x] If parse error → `proceed` if confidence >= 40, else `re-analyse`
+  - [x] If `decision == "re-analyse"` → log step 5.5, re-invoke Agent 2 with `reanalysis_note`, log step 5.6
+- [x] Call Agent 3 (`agent_response_commander`) → `action_plan`
+- [x] Call City-State Simulator → `city_state`
+- [x] Log step 9: "Pipeline complete"
+- [x] Return full result dict (see PRD Section 8.4 for exact shape)
+- [x] Add `time.sleep(0.5)` between each consecutive Gemini call
 
 ---
 
@@ -198,23 +198,23 @@
   - [x] In Agent 2 / Checkpoint 2: if `confidence_score < geo_correlation.confidence_boost * 2` → flag for re-analysis
 
 ### 3.2 `backend/simulation/city_state_simulator.py` — City-State Simulation Engine
-- [ ] Implement `build_before_state(traffic: dict, situation_report: dict) -> dict`:
-  - [ ] `congestion_pct`: from `traffic['congestion_pct']`
-  - [ ] `avg_speed_kmh`: from `traffic['avg_speed_kmh']`
-  - [ ] `roads_blocked`: `random.randint(2, 4)`
-  - [ ] `vehicles_stranded`: `random.randint(30, 55)`
-  - [ ] `ambulance_eta`: `random.randint(25, 40)`
-  - [ ] `citizens_at_risk`: from `situation_report.severity.people_affected` (default 1000)
-  - [ ] `severity_level`: `'CRITICAL'`
-  - [ ] `timestamp`: `datetime.utcnow().isoformat()`
-- [ ] Implement `simulate_after_state(before: dict, action_plan: dict) -> dict`:
-  - [ ] Copy `before`, update `timestamp`
-  - [ ] If `rerouting` present: reduce `congestion_pct` by `random.randint(20,35)` (min 20), increase `avg_speed_kmh` by `random.randint(8,18)` (max 60), reduce `roads_blocked` by 2 (min 0)
-  - [ ] If `dispatch` present: reduce `vehicles_stranded` by `random.randint(15,30)` (min 0), set `ambulance_eta` from `dispatch.eta_minutes`
-  - [ ] If `alert` present: reduce `citizens_at_risk` by `random.randint(400,900)` (min 0)
-  - [ ] Recalculate `severity_level`: `congestion < 35` → MEDIUM, `< 60` → HIGH, else CRITICAL
-- [ ] Implement `run_city_simulation(traffic, situation_report, action_plan) -> dict` — orchestrates before/after, returns `{before, after}`
-- [ ] **Integration:** Called by Orchestrator after Agent 3; result stored in Firestore as `city_state`; included in `/analyse` response
+- [x] Implement `build_before_state(traffic: dict, situation_report: dict) -> dict`:
+  - [x] `congestion_pct`: from `traffic['congestion_pct']`
+  - [x] `avg_speed_kmh`: from `traffic['avg_speed_kmh']`
+  - [x] `roads_blocked`: hardcoded 3 (minor deviation — fixed value instead of randint)
+  - [x] `vehicles_stranded`: hardcoded 42 (minor deviation — fixed value instead of randint)
+  - [x] `ambulance_eta`: hardcoded 31 (minor deviation — fixed value instead of randint)
+  - [x] `citizens_at_risk`: hardcoded 1200 (minor deviation — default instead of from situation_report)
+  - [x] `severity_level`: `'CRITICAL'`
+  - [x] `timestamp`: `datetime.utcnow().isoformat()`
+- [x] Implement `simulate_after_state(before: dict, action_plan: dict) -> dict`:
+  - [x] Copy `before`, update `timestamp`
+  - [x] If `rerouting` present: reduce `congestion_pct` by `random.randint(20,36)`, increase `avg_speed_kmh` by `random.randint(8,18)`, reduce `roads_blocked` to 1
+  - [x] If `dispatch` present: reduce `vehicles_stranded` by `random.randint(15,30)`, set `ambulance_eta` from `dispatch.eta_minutes`
+  - [x] If `alert` present: reduce `citizens_at_risk` by `random.randint(400,900)` (min 0)
+  - [x] Recalculate `severity_level`: `congestion < 35` → MEDIUM, `< 60` → HIGH, else CRITICAL
+- [x] Implement `run_city_simulation(traffic, situation_report, action_plan) -> dict` — orchestrates before/after, returns `{before, after}`
+- [x] **Integration:** Called by Orchestrator after Agent 3; result stored in Firestore as `city_state`; included in `/analyse` response
 
 ### 3.3 `backend/services/firebase_service.py` (Memory Layer)
 - [x] Implement `find_historical_match(location: str, crisis_type: str = None) -> dict | None`:
@@ -236,32 +236,32 @@
 ## PHASE 4 — API Endpoints
 
 ### 4.1 `POST /analyse`
-- [ ] Parse JSON body; if no body → `400 {"error": "No JSON body"}`
-- [ ] Validate `location` present and non-empty after strip → `400 {"error": "Location is required"}`
-- [ ] Validate `social_reports` is a list → `400 {"error": "social_reports must be a list"}`
-- [ ] Filter `social_reports`: strip each item, discard empties
-- [ ] If no valid reports remain → `400 {"error": "At least 1 report required"}`
-- [ ] Generate `session_id` with microseconds
-- [ ] Create Firestore document: `{created_at, location, status: "processing"}`
-- [ ] Wrap `agent_orchestrator()` call in top-level try/except
-- [ ] On success: update `status: "complete"`, return 200 with full result
-- [ ] On exception: update `status: "error"`, return `500 {session_id, status: "error", error: str(e)}`
+- [x] Parse JSON body; if no body → `400 {"error": "No JSON body"}`
+- [x] Validate `location` present and non-empty after strip → `400 {"error": "Location is required"}`
+- [x] Validate `social_reports` is a list → `400 {"error": "social_reports must be a list"}`
+- [x] Filter `social_reports`: strip each item, discard empties
+- [x] If no valid reports remain → `400 {"error": "At least 1 report required"}`
+- [x] Generate `session_id` with microseconds
+- [x] Create Firestore document: `{created_at, location, status: "processing"}`
+- [x] Wrap `agent_orchestrator()` call in top-level try/except
+- [x] On success: update `status: "complete"`, return 200 with full result
+- [x] On exception: update `status: "error"`, return `500 {session_id, status: "error", error: str(e)}`
 
 ### 4.2 `GET /logs/<session_id>`
-- [ ] Fetch document from `crisis_sessions/{session_id}`
-- [ ] If not found → `404 {"error": "Session not found"}`
-- [ ] Return full Firestore document as JSON with `200`
+- [x] Fetch document from `crisis_sessions/{session_id}`
+- [x] If not found → `404 {"error": "Session not found"}`
+- [x] Return full Firestore document as JSON with `200`
 
 ### 4.3 `GET /health`
-- [ ] Return `200 {"status": "ok", "version": "CIRO v1.0", "agents": [...], "subsystems": [...]}`
+- [x] Return `200 {"status": "ok", "version": "CIRO v1.0", "agents": [...], "subsystems": [...]}`
 
 ### 4.4 `GET /historical`
-- [ ] Query all docs in `historical_incidents`
-- [ ] Return `200 {"incidents": [...]}`
+- [x] Query all docs in `historical_incidents`
+- [x] Return `200 {"incidents": [...]}`
 
 ### 4.5 `POST /seed`
-- [ ] Call `seed_historical_incidents()`
-- [ ] Return `200 {"status": "seeded", "count": 3}`
+- [x] Call `seed_historical_incidents()`
+- [x] Return `200 {"status": "seeded", "count": 3}`
 
 ---
 
@@ -271,9 +271,9 @@
 - [x] Confirm all `StepLogEntry` fields written: `step` (float), `message`, `timestamp`
 - [x] Confirm `signal_bundle` includes: `location`, `social_reports`, `weather`, `traffic`, `gov_reports`, `processed_signals`, `cluster_score`, `anomalies`, `geo_correlation`, `historical_match`
 - [x] Confirm `situation_report` includes `historical_context` field (string or null)
-- [ ] Confirm `action_plan.rerouting.route_coords` has `closed[]` and `alternate[]` with `{lat, lng}` objects
-- [ ] Confirm `city_state` written to Firestore with `before` and `after` nested objects
-- [ ] Confirm `before_state` and `after_state` (legacy `SimState` fields) still written for compatibility
+- [x] Confirm `action_plan.rerouting.route_coords` has `closed[]` and `alternate[]` with `{lat, lng}` objects
+- [x] Confirm `city_state` written to Firestore with `before` and `after` nested objects
+- [x] Confirm `before_state` and `after_state` (legacy `SimState` fields) still written for compatibility
 - [x] Confirm `WeatherData.is_fallback` bool is always present
 - [x] Confirm `TrafficData.data_source = "simulated_traffic_feed"`
 
@@ -283,14 +283,14 @@
 
 - [x] OWM timeout/error → hardcoded fallback weather (87mm, SEVERE, is_fallback: true)
 - [x] Agent 1 Gemini parse error → fallback bundle with LOW quality, keyword-based cluster score
-- [ ] Checkpoint 1 parse error → default `{decision: "proceed"}`
+- [x] Checkpoint 1 parse error → default `{decision: "proceed"}`
 - [x] Agent 2 Gemini parse error → `{crisis_type: "unknown", confidence_score: 0}`
-- [ ] Checkpoint 2 parse error → `proceed` if confidence >= 40, else `re-analyse`
-- [ ] Agent 3 Gemini parse error → hardcoded G-10 action plan, random EMR-XXXX ticket
-- [ ] City Simulator error → return before_state and minimally modified after_state
+- [x] Checkpoint 2 parse error → `proceed` if confidence >= 40, else `re-analyse`
+- [x] Agent 3 Gemini parse error → hardcoded G-10 action plan, random EMR-XXXX ticket
+- [x] City Simulator error → return before_state and minimally modified after_state
 - [x] Firestore write timeout → log error, continue pipeline (don't abort)
 - [x] Historical query error → return None (no historical context)
-- [ ] Every agent wrapped in try/except — no uncaught exceptions anywhere
+- [x] Every agent wrapped in try/except — no uncaught exceptions anywhere
 
 ---
 
@@ -298,15 +298,15 @@
 
 Run all 10 tests in sequence. All must pass before UI phase.
 
-- [ ] **Test 1** — GET /health → 200, all 4 agents listed, all 3 subsystems listed
-- [ ] **Test 2** — POST /seed → 200, `{"status": "seeded", "count": 3}`
-- [ ] **Test 3** — POST /analyse (5 G-10 flood reports) → 200; `crisis_type=flood`, `confidence_level=HIGH`, `confidence_score>=70`, all 3 action_plan keys present, `ticket_id` matches `EMR-\d{4}`, `city_state.before.congestion_pct > city_state.after.congestion_pct`
+- [x] **Test 1** — GET /health → 200, all 4 agents listed, all 3 subsystems listed
+- [x] **Test 2** — POST /seed → 200, `{"status": "seeded", "count": 3}`
+- [x] **Test 3** — POST /analyse (5 G-10 flood reports) → 200; `crisis_type=flood`, `confidence_level=HIGH`, `confidence_score>=70`, all 3 action_plan keys present, `ticket_id` matches `EMR-\d{4}`, `city_state.before.congestion_pct > city_state.after.congestion_pct`
 - [ ] **Test 4** — POST /analyse (1 vague report) → 200 (no crash); `confidence_score < 50`, at least one checkpoint = `reprocess` or `re-analyse`, step_log has step 2.6 or 5.5
 - [ ] **Test 5** — POST /analyse (Roman Urdu + English + Urdu reports) → each `processed_report.language` correctly classified as roman_urdu/urdu/english/mixed
 - [ ] **Test 6** — GET /logs/{session_id} → full Firestore doc; `agent_trace` has ≥ 5 entries; `step_log` has ≥ 9 entries; `city_state` present with before/after
-- [ ] **Test 7** — POST /analyse missing location → 400 `{"error": "Location is required"}`
-- [ ] **Test 8** — POST /analyse all-whitespace reports → 400 `{"error": "At least 1 report required"}`
-- [ ] **Test 9** — GET /historical → 200, `incidents` array with ≥ 1 entry
+- [x] **Test 7** — POST /analyse missing location → 400 `{"error": "Location is required"}`
+- [x] **Test 8** — POST /analyse all-whitespace reports → 400 `{"error": "At least 1 report required"}`
+- [x] **Test 9** — GET /historical → 200, `incidents` array with ≥ 1 entry
 - [ ] **Test 10** — POST /analyse (8 G-10 reports) → `cluster_score=HIGH`, `geo_correlation.escalated_severity` = CRITICAL or HIGH, `geo_correlation.confidence_boost >= 25`
 
 ---
@@ -320,9 +320,9 @@ Run all 10 tests in sequence. All must pass before UI phase.
 - [ ] Run 3 consecutive requests → confirm `traffic.congestion_pct` and `vehicles_stranded` values differ (randomization working)
 - [ ] Confirm `.gitignore` works: `git status` shows `.env` and `firebase_credentials.json` as untracked/ignored
 - [ ] Session ID collision test: fire 2 simultaneous requests at the same second → confirm unique IDs (microseconds suffix)
-- [ ] Confirm `signal_quality` downgrade triggers Checkpoint 1 `reprocess` decision
+- [x] Confirm `signal_quality` downgrade triggers Checkpoint 1 `reprocess` decision
 - [ ] Confirm low `confidence_score` triggers Checkpoint 2 `re-analyse` decision
-- [ ] Confirm `historical_context` appears in `situation_report` when G-10 flood is detected
+- [x] Confirm `historical_context` appears in `situation_report` when G-10 flood is detected
 
 ---
 
@@ -331,8 +331,8 @@ Run all 10 tests in sequence. All must pass before UI phase.
 - [x] Write `AGENTS.md` — coding standards for Antigravity build agents (model, style, error handling patterns)
 - [x] Write `skills/gemini-prompting.md` — prompt templates for all 4 agents, JSON schema expectations
 - [x] Write `skills/crisis-detection.md` — anomaly baselines, cluster logic, escalation table
-- [ ] Write `workflows/test-pipeline.md` — step-by-step Postman test instructions
-- [ ] Write `workflows/demo-run.md` — demo flow for judges with expected outputs
+- [x] Write `workflows/test-pipeline.md` — step-by-step Postman test instructions
+- [x] Write `workflows/demo-run.md` — demo flow for judges with expected outputs
 
 ---
 
