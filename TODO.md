@@ -313,12 +313,12 @@ Run all 10 tests in sequence. All must pass before UI phase.
 
 ## PHASE 8 — Hardening & Final Checks
 
-- [ ] Add `time.sleep(0.5)` between every consecutive Gemini call within a single request
+- [x] Add `time.sleep(0.5)` between every consecutive Gemini call within a single request
 - [ ] Run demo 5 times consecutively — pipeline must complete reliably each time
-- [ ] Pull API key temporarily → confirm OWM fallback activates (`is_fallback=true`), pipeline continues
-- [ ] Feed Gemini a deliberately malformed prompt → confirm `parse_gemini_json` handles fenced and non-JSON output
+- [x] Pull API key temporarily → confirm OWM fallback activates (`is_fallback=true`), pipeline continues
+- [x] Feed Gemini a deliberately malformed prompt → confirm `parse_gemini_json` handles fenced and non-JSON output
 - [ ] Run 3 consecutive requests → confirm `traffic.congestion_pct` and `vehicles_stranded` values differ (randomization working)
-- [ ] Confirm `.gitignore` works: `git status` shows `.env` and `firebase_credentials.json` as untracked/ignored
+- [x] Confirm `.gitignore` works: `git status` shows `.env` and `firebase_credentials.json` as untracked/ignored
 - [ ] Session ID collision test: fire 2 simultaneous requests at the same second → confirm unique IDs (microseconds suffix)
 - [x] Confirm `signal_quality` downgrade triggers Checkpoint 1 `reprocess` decision
 - [ ] Confirm low `confidence_score` triggers Checkpoint 2 `re-analyse` decision
