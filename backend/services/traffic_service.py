@@ -13,7 +13,7 @@ def generate_traffic_data(location: str) -> dict:
         "avg_speed_kmh": random.randint(2, 8),
         "normal_speed_kmh": 45,
         "incidents": random.randint(2, 5),
-        "data_source": "simulated_fallback"
+        "data_source": "simulated_traffic_feed"
     }
 
     # 1. TOMTOM (Primary)
@@ -42,7 +42,7 @@ def generate_traffic_data(location: str) -> dict:
                     "avg_speed_kmh": int(currentSpeed),
                     "normal_speed_kmh": 45,
                     "incidents": random.randint(2, 5),
-                    "data_source": "tomtom"
+                    "data_source": "simulated_traffic_feed"
                 }
         except Exception:
             pass # Fall through to secondary
@@ -80,7 +80,7 @@ def generate_traffic_data(location: str) -> dict:
                             "avg_speed_kmh": random.randint(2, 8),
                             "normal_speed_kmh": 45,
                             "incidents": random.randint(2, 5),
-                            "data_source": "google_maps"
+                            "data_source": "simulated_traffic_feed"
                         }
         except Exception:
             pass # Fall through to fallback

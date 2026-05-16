@@ -9,7 +9,7 @@ AGENT_RESPONSE_COMMANDER = 'response_commander'
 AGENT_ORCHESTRATOR = 'orchestrator'
 
 # Models
-GEMINI_MODEL = 'gemini-2.5-flash'
+GEMINI_MODEL = 'gemini-2.5-flash-lite'
 
 # Coordinates
 COORDS = {
